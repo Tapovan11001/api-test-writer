@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API Test Writer</title>
+<meta name="description" content="Paste an OpenAPI spec. Get API tests for the happy path, bad input, missing auth and unknown ids, run them, and download a test file.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>API Test Writer</h1>
+    <p class="tag">Paste an OpenAPI spec. Get the tests every endpoint should pass, run them, and take home a test file.</p>
+  </header>
+
+  <main class="desk">
+    <section class="spec" aria-labelledby="spec-h">
+      <div class="sec-head">
+        <h2 id="spec-h">OpenAPI spec <span class="muted">YAML or JSON</span></h2>
+        <button type="button" id="load-sample" class="link">Load sample</button>
+      </div>
+      <textarea id="spec" spellcheck="false" aria-label="OpenAPI spec"></textarea>
+      <p id="spec-error" class="error" role="alert" hidden></p>
+    </section>
+
+    <section class="work" aria-label="Tests">
+      <div class="bar">
+        <div class="counts" id="counts"></div>
+        <div class="target">
+          <label for="base">Run against</label>
+          <input id="base" type="text" spellcheck="false" placeholder="https://api.example.com">
+          <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="Token (optional)" aria-label="API token">
+          <button type="button" id="run" class="primary">Run tests</button>
+        </div>
+        <p class="fine" id="target-note"></p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tab-tests" aria-selected="true" aria-controls="panel-tests">Tests</button>
+        <button type="button" role="tab" id="tab-file" aria-selected="false" aria-controls="panel-file">Test file</button>
+        <button type="button" role="tab" id="tab-claude" aria-selected="false" aria-controls="panel-claude">Ask Claude</button>
+      </div>
+
+      <div id="panel-tests" role="tabpanel" aria-labelledby="tab-tests">
+        <p id="summary" class="summary" aria-live="polite"></p>
+        <div id="ops"></div>
+      </div>
+
+      <div id="panel-file" role="tabpanel" aria-labelledby="tab-file" hidden>
+        <div class="file-bar">
+          <code>api.test.mjs</code>
+          <span class="grow"></span>
+          <button type="button" id="copy">Copy</button>
+          <button type="button" id="download" class="primary">Download</button>
+        </div>
+        <pre id="code" tabindex="0"></pre>
+      </div>
+
+      <div id="panel-claude" role="tabpanel" aria-labelledby="tab-claude" hidden>
+        <p>The rules above only know what the schema says. Claude also reads the summaries and descriptions, so it can test business rules, like which status changes are allowed. Every test it suggests is checked against the spec before it's added: the path has to match, and the expected status has to be one the spec declares.</p>
+        <label for="api-key">Anthropic API key</label>
+        <div class="row">
+          <input id="api-key" type="password" autocomplete="off" placeholder="sk-ant-..." spellcheck="false">
+          <button type="button" id="ask" class="primary">Find more tests</button>
+        </div>
+        <p class="fine">Your key stays in this tab and goes only to api.anthropic.com.</p>
+        <p id="claude-status" class="status" aria-live="polite"></p>
+        <div id="claude-reply" class="reply" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <section class="how" aria-label="How it works">
+    <h2>How it works</h2>
+    <p>A developer pastes their API's OpenAPI spec, the file that lists every endpoint and what it accepts. API Test Writer reads it and writes the tests every endpoint should pass: a normal request works, a missing or wrong field gets rejected, an unknown id returns "not found", and a request without a login token is refused. It only expects responses the spec actually promises. You can run the tests right in the page; the built-in demo API has two hidden bugs, and the tests find both. Claude adds tests for business rules the simple checks can't see. Then you download a ready-to-run test file.</p>
+  </section>
+
+  <footer class="foot">
+    <p>Built with TinyHarness, a small agent loop written from scratch. The baseline tests come from plain rules; Claude adds the ones rules can't see.</p>
+  </footer>
+<a class="made-by" href="https://github.com/Tapovan11001" target="_blank" rel="noopener">Created by Aarav Makhija</a>
+<script type="module" src="./main.ts"></script>
+</body>
+</html>
