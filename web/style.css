@@ -119,7 +119,7 @@ pre#code { margin: 0; max-height: 70vh; overflow: auto; background: var(--code-b
   .row { flex-direction: column; }
 }
 
-/* ---- "Created by Aarav Makhija" watermark + plain-language explainer ---- */
+/* ---- "Created by Aarov Makhija" watermark + plain-language explainer ---- */
 .made-by {
   position: fixed; z-index: 50;
   right: calc(12px + env(safe-area-inset-right, 0px));
